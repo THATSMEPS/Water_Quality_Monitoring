@@ -4,6 +4,7 @@ from app import db
 from app.alerts import evaluate_alerts
 import datetime
 from app.anomaly import detect_anomaly
+from fastapi import HTTPException
 
 router = APIRouter()
 
@@ -13,8 +14,8 @@ async def receive_data(data: SensorData):
     document["timestamp"] = datetime.datetime.now(datetime.timezone.utc)
 
     # Detect anomalies
-    is_anomalous = detect_anomaly(document)
-    document["anomaly"] = is_anomalous
+    is_anomalous = await detect_anomaly(document)
+    document["anomaly"] = bool(is_anomalous)
 
     alerts = evaluate_alerts(document)
     if alerts:
@@ -43,3 +44,26 @@ async def get_latest_reading():
         doc["_id"] = str(doc["_id"])
         return doc
     return {"message": "No data found"}
+
+@router.delete("/api/readings/delete_all")
+async def delete_all_readings():
+    result = await db.database.readings.delete_many({})
+    return {"message": f"Deleted {result.deleted_count} readings."}
+
+# Delete latest N entries
+@router.delete("/api/readings/delete_latest/{count}")
+async def delete_latest_readings(count: int):
+    if count <= 0:
+        raise HTTPException(status_code=400, detail="Count must be a positive integer.")
+    
+    # Get the latest N document _ids
+    cursor = db.database.readings.find().sort("timestamp", -1).limit(count)
+    ids_to_delete = []
+    async for doc in cursor:
+        ids_to_delete.append(doc["_id"])
+
+    if ids_to_delete:
+        result = await db.database.readings.delete_many({"_id": {"$in": ids_to_delete}})
+        return {"message": f"Deleted {result.deleted_count} latest readings."}
+    else:
+        return {"message": "No readings found to delete."}
