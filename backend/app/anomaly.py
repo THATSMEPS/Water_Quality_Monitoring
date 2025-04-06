@@ -35,7 +35,7 @@ class AnomalyDetector:
 
         return bool(prediction == -1), float(score)
 
-# Singleton
+
 detector = AnomalyDetector()
 
 async def detect_anomaly(new_sample: Dict) -> bool:
