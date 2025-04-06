@@ -1,0 +1,190 @@
+/* General App Layout */
+body{
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.app-container {
+    display: flex;
+    height: 100vh;
+    background-color: #111;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.page-heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.gold-text {
+    color: #facc15;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    margin: 20px 0;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    font-size: 22px;
+}
+
+.sidebar a:hover {
+    color: #facc15;
+}
+
+/* Sensor Table Styles */
+.table-container {
+    background-color: #1f1f1f;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+}
+
+.table-container h3 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    color: white;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    font-weight: bold;
+}
+
+tr {
+    border-bottom: 1px solid #333;
+}
+
+.edit-icon {
+    color: #3b82f6;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.delete-icon {
+    color: #ef4444;
+    cursor: pointer;
+}
+.settings-container {
+    background-color: #1f1f1f;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    max-width: 600px;
+}
+
+.settings-container p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 300px;
+}
+
+.delete-button {
+    padding: 12px;
+    background-color: #dc2626;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.delete-button:hover {
+    background-color: #b91c1c;
+}
+/* Add at the bottom of style.css */
+
+.anomaly-row {
+    background-color: #7f1d1d; /* dark red for anomaly */
+    color: #facc15;
+  }
+  
+  .refresh-button {
+    background-color: #3b82f6;
+    border: none;
+    color: white;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  
+  .refresh-button:hover {
+    background-color: #2563eb;
+  }
+  .dummy-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .dummy-form input {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    width: 160px;
+  }
+  
+  .dummy-form button {
+    margin-top: 10px;
+  }
+  .custom-delete-section {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .custom-delete-input {
+    padding: 6px;
+    font-size: 14px;
+    width: 150px;
+  }
+  
+  
