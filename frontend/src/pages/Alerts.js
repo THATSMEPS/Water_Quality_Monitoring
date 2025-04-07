@@ -34,11 +34,11 @@ function Alerts() {
             {alerts.map((entry, idx) => (
               <tr key={idx}>
                 <td>{new Date(entry.timestamp).toLocaleString()}</td>
-                <td>{entry.ph}</td>
+                <td>{entry.pH}</td>
                 <td>{entry.temperature}</td>
                 <td>{entry.turbidity}</td>
-                <td>{entry.do}</td>
-                <td>{entry.tds}</td>
+                <td>{entry.DO}</td>
+                <td>{entry.TDS}</td>
                 <td style={{ color: 'red' }}>{entry.alerts}</td>
               </tr>
             ))}

@@ -88,9 +88,6 @@ Visit: http://127.0.0.1:8000/docs to test the API via Swagger UI.
 ### 👨‍💻 Contributing
 Pull requests are welcome! For major changes, open an issue first to discuss what you’d like to change.
 
-### 📄 License
-MIT License. Feel free to use and modify. Just give credit where due 🙂
-
 ### 📬 Contact
 If you have any questions or suggestions:
 - **Team Lead: Pratham Shah**
