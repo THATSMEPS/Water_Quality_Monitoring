@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -8,56 +8,78 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import axios from "axios";
 import "./Home.css";
 
-const metrics = [
-  { label: "pH Level", value: "7.2", unit: "", color: "#38bdf8" },
-  { label: "Temperature", value: "22°C", unit: "", color: "#f87171" },
-  { label: "Turbidity", value: "3 NTU", unit: "", color: "#a78bfa" },
-  { label: "Sensors Online", value: "5/5", unit: "", color: "#34d399" },
-];
-
-// Dummy chart data (replace with backend fetch if needed)
-const phData = [
-  { time: "10:00", ph: 7.0 },
-  { time: "10:10", ph: 7.1 },
-  { time: "10:20", ph: 7.3 },
-  { time: "10:30", ph: 7.2 },
-  { time: "10:40", ph: 7.1 },
-];
-
-const tempData = [
-  { time: "10:00", temp: 21 },
-  { time: "10:10", temp: 22 },
-  { time: "10:20", temp: 22.5 },
-  { time: "10:30", temp: 22 },
-  { time: "10:40", temp: 21.8 },
-];
-
 const Home = () => {
+  const [sensorData, setSensorData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchSensorData = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get("http://127.0.0.1:8000/api/readings");
+      setSensorData(res.data);
+    } catch (err) {
+      console.error("Error fetching sensor data:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSensorData();
+  }, []);
+
+  const phData = sensorData.map((d, index) => ({
+    time: `#${index + 1}`,
+    ph: d.pH,
+  }));
+
+  const tempData = sensorData.map((d, index) => ({
+    time: `#${index + 1}`,
+    temp: d.temperature,
+  }));
+
+  const doData = sensorData.map((d, index) => ({
+    time: `#${index + 1}`,
+    do: d.DO,
+  }));
+
+  const tdsData = sensorData.map((d, index) => ({
+    time: `#${index + 1}`,
+    tds: d.TDS,
+  }));
+
+  const latest = sensorData.length > 0 ? sensorData[sensorData.length - 1] : {};
+
+  const metrics = [
+    { label: "pH Level", value: latest.pH ?? "-", unit: "", color: "#38bdf8" },
+    { label: "Temperature", value: latest.temperature ? `${latest.temperature}°C` : "-", unit: "", color: "#f87171" },
+    { label: "Dissolved Oxygen", value: latest.DO ?? "-", unit: "mg/L", color: "#60a5fa" },
+    { label: "Total Dissolved Solids", value: latest.TDS ?? "-", unit: "ppm", color: "#fbbf24" },
+  ];
+
   return (
     <div>
       <h1 className="page-heading">
         Welcome to <span className="gold-text">Water Dashboard</span>
       </h1>
 
-      {/* Summary cards */}
       <div className="card-grid">
         {metrics.map((item, idx) => (
           <div
             key={idx}
             className="info-card"
-            style={{ borderLeft: 4px solid ${item.color} }}
+            style={{ borderLeft: `4px solid ${item.color}` }}
           >
             <h3>{item.label}</h3>
-            <p>{item.value}</p>
+            <p>{item.value} {item.unit}</p>
           </div>
         ))}
       </div>
 
-      {/* Charts Section */}
       <div className="chart-section">
-        {/* pH Level Chart */}
         <div className="chart-box">
           <h2 className="chart-title">📊 pH Level Trend</h2>
           <ResponsiveContainer width="100%" height={250}>
@@ -77,7 +99,6 @@ const Home = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Temperature Chart */}
         <div className="chart-box">
           <h2 className="chart-title">🌡 Temperature Trend</h2>
           <ResponsiveContainer width="100%" height={250}>
@@ -90,6 +111,44 @@ const Home = () => {
                 type="monotone"
                 dataKey="temp"
                 stroke="#f87171"
+                strokeWidth={3}
+                dot={{ r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-box">
+          <h2 className="chart-title">💧 Dissolved Oxygen Trend</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={doData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="time" stroke="#ccc" />
+              <YAxis stroke="#ccc" unit="mg/L" />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="do"
+                stroke="#60a5fa"
+                strokeWidth={3}
+                dot={{ r: 4 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="chart-box">
+          <h2 className="chart-title">🧪 Total Dissolved Solids Trend</h2>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={tdsData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="time" stroke="#ccc" />
+              <YAxis stroke="#ccc" unit="ppm" />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="tds"
+                stroke="#fbbf24"
                 strokeWidth={3}
                 dot={{ r: 4 }}
               />
