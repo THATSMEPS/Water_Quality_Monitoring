@@ -8,7 +8,7 @@ from fastapi import HTTPException
 
 router = APIRouter()
 
-@router.post("/api/sensor-data")
+@router.post("/api/sensor-data")    
 async def receive_data(data: SensorData):
     document = data.model_dump()
     document["timestamp"] = datetime.datetime.now(datetime.timezone.utc)
